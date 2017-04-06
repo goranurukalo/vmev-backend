@@ -1,0 +1,20 @@
+{
+  "name": "vmev-backend",
+  "version": "1.0.0",
+  "description": "This is server side javascript code for vmev application.",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "mongodb"
+  ],
+  "author": "Goran Urukalo",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.2",
+    "mongodb": "^2.2.25"
+  }
+}
