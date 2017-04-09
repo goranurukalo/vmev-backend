@@ -76,8 +76,10 @@ app.post('/register', function(req,res,next){
     }
 
     if(Object.keys(user).length == 4){
+        //namesti da se proveri unique za email i upisi u bazu
+
         user['dateOfReg'] = Math.floor(new Date().getTime() / 1000) | 0;
-        user['verificationCode'] = Math.random().toString(36).substr(2, 5);
+        user['verificationCode'] = Math.random().toString(25).substr(2, 22);
         user['role'] = 'User';
         user['status'] = 'Waiting';
         //opali u bazu
