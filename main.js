@@ -1,5 +1,4 @@
 const express = require('express');
-const database = require('./database');
 const mongo = require('mongodb').MongoClient;
 const dbS = require('./databaseSecret');
 
@@ -16,22 +15,47 @@ app.listen(app.get('port') , function(){
 
 app.get('/login', function(req,res,next){
 
-    mongo.connect(dbS.host + dbS.database + dbS.tail, function(error, db) {
-        if(error){
-            console.log('Bad connecting with database:'+error);
+    var query = function(fn) {
+        mongo.connect(dbS.host + dbS.database + dbS.tail, function(error, db) {
+            if(error){
+                console.log('Bad connecting with database:'+error);
+            }
+            else{
+                console.log('We have connect with database');
+                var data = [];
+                var users = db.collection('users').find();
+                users.forEach(function(row, err){
+                    if(err){
+                        console.log('error : '+err);
+                    }
+                    else{
+                        //console.log('One user : '+ JSON.stringify(row));
+                        //data.push(row.firstName);
+                        data.push(row);
+                    }
+                },function(){
+                    db.close();
+                    if(data.length){
+                        return fn(null, data);
+                    }
+                    else{
+                        return fn("error: no one with this email and password.", null);
+                    }
+                });
+            }
+        });
+    };
+    query(function (err, result) {
+        if(err == null){
+            //do something
+            res.send(JSON.stringify(result));
+            //console.log(result);
+            //res.send('ovde smo');
         }
         else{
-            console.log('We have connect with database');
-            var users = db.collection('users').find();
-            users.forEach(function(row, err){
-                if(err){console.log('error : '+err);}
-                console.log('One user : '+ row.firstName);
-            });
-            db.close();
+            res.send(err);
         }
     });
-
-    res.send('good');
 });
 
 app.get('/register', function(req,res,next){
