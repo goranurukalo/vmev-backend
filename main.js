@@ -49,10 +49,7 @@ app.get('/login', function(req,res,next){
     };
     query(function (err, result) {
         if(err == null){
-            //do something
             res.send(JSON.stringify(result));
-            //console.log(result);
-            //res.send('ovde smo');
         }
         else{
             res.send(err);
@@ -61,8 +58,34 @@ app.get('/login', function(req,res,next){
 });
 
 app.post('/register', function(req,res,next){
-    console.log(req.body);
-    res.status(200).json(req.body);
+    var user =  {};
+    
+    if((/^\w{1,3}$/).test(req.body.firstName)){
+        user['firstName'] = req.body.firstName;
+    }
+    if((/^\w{1,3}$/).test(req.body.lastName)){
+        user['lastName'] = req.body.lastName;
+    }
+    if((/^\w{1,3}$/).test(req.body.email)){
+        user['email'] = req.body.email;
+    }
+    if(req.body.password == req.body.sec_pass){
+        if((/^\w{1,3}$/).test(req.body.password)){
+            user['password'] = req.body.password;
+        }
+    }
+
+    if(Object.keys(user).length == 4){
+        user['dateOfReg'] = Math.floor(new Date().getTime() / 1000) | 0;
+        user['verificationCode'] = Math.random().toString(36).substr(2, 5);
+        user['role'] = 'User';
+        user['status'] = 'Waiting';
+        //opali u bazu
+        res.status(200).json(user);
+    }
+    else{
+        res.status(400).json({"good-input": "false"});
+    }
 });
 
 app.get('/addfriend', function(req,res,next){
