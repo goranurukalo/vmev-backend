@@ -97,3 +97,7 @@ app.get('/addfriend', function(req,res,next){
 app.get('/removefriend', function(req,res,next){
 
 });
+
+app.get('/verifiyemail', function(req,res,next){
+
+});
