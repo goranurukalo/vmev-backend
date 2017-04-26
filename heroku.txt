@@ -1,0 +1,5 @@
+Turn off->
+heroku ps:scale web=0
+
+Turn on ->
+heroku ps:scale web=1

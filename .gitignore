@@ -2,3 +2,4 @@ node_modules/
 databaseSecret.js
 database.query
 sendgrid.env
+mailSecret.js

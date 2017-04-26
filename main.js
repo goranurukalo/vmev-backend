@@ -2,12 +2,16 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongo = require('mongodb').MongoClient;
 const dbS = require('./databaseSecret');
+const eS = require('./emailSecret');
 
 const app = express();
 
-app.set('port', 3000);
+const sg = require('sendgrid')(eS.key);
+const helper = require('sendgrid').mail;
+
+app.set('port', process.env.PORT || 443);
 app.get('/',function(req, res, next){
-    res.send('express works');
+    res.send("I'm a student and this is an application for learning");
 });
 app.listen(app.get('port') , function(){
     console.log('Server started ...');
@@ -113,7 +117,31 @@ app.post('/register', function(req,res,next){
             }
             else{
 				db.collection('users').insertOne(user, function(err , data){
-					if(err == null){
+					if(err == null){						
+	
+						var fromEmail = new helper.Email('registration@vmev.com');
+						var toEmail = new helper.Email(user.email);
+						var subject = 'Sending with SendGrid is Fun';
+						var content = new helper.Content('text/plain', 'and easy to do anywhere, even with Node.js');
+						var mail = new helper.Mail(fromEmail, subject, toEmail, content);
+
+
+						var request = sg.emptyRequest({
+						    method: 'POST',
+						    path: '/v3/mail/send',
+						    body: mail.toJSON()
+						});
+
+						sg.API(request, function (error, response) {
+							if (error) {
+								console.log('Error response received');
+							}
+							else{
+								console.log(response.statusCode);
+								console.log(response.body);
+								console.log(response.headers);
+							}
+						});
 						res.status(200).json(user);
 					}
 					else{
