@@ -17,6 +17,7 @@
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
     "iconv-lite": "^0.4.15",
-    "mongodb": "^2.2.25"
+    "mongodb": "^2.2.25",
+    "sendgrid": "^5.0.1"
   }
 }

@@ -107,11 +107,25 @@ app.post('/register', function(req,res,next){
         user['status'] = 'Waiting';
         user['peerID'] = '';
 		
-        //opali u bazu
-        res.status(200).json(user);
+		mongo.connect(dbS.host + dbS.database + dbS.tail, function(error, db) {
+            if(error){
+				res.status(500).json({"server": "Bad connecting with database."});
+            }
+            else{
+				db.collection('users').insertOne(user, function(err , data){
+					if(err == null){
+						res.status(200).json(user);
+					}
+					else{
+						res.status(400).json({"Server": "Email exist!"});
+					}
+					db.close();
+				});
+            }
+        });
     }
     else{
-        res.status(400).json({"good-input": "false"});
+        res.status(400).json({"good-input": "false", "user-data": user});
     }
 });
 
