@@ -1,5 +1,7 @@
 node_modules/
 databaseSecret.js
+mailSecret.js
 database.query
 sendgrid.env
-mailSecret.js
+heroku.txt
+old_usesrDB_info.txt
