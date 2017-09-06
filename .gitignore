@@ -1,7 +1,9 @@
 node_modules/
 databaseSecret.js
+imgurSecret.js
 mailSecret.js
 database.query
 sendgrid.env
 heroku.txt
 old_usesrDB_info.txt
+imgstorage.txt
